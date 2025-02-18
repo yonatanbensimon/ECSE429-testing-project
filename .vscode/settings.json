@@ -1,0 +1,11 @@
+{
+    "python.testing.pytestArgs": [
+        "Part 1"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.analysis.extraPaths": [
+        "./Part 1/UnitTestSuite/Project",
+        "./Part 1/UnitTestSuite/Todo"
+    ]
+}
