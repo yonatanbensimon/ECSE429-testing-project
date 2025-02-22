@@ -47,7 +47,6 @@ class TesttodoEndpoint:
         response = requests.get(BASE_URL, headers=HEADERS_JSON)
         assert response.status_code == 200
         self.initial_todos = response.json()
-        print(response.json())
 
     def test_get_all_todos_json(self):
         response = requests.get(BASE_URL, headers=HEADERS_JSON)
