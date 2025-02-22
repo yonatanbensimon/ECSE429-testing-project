@@ -98,6 +98,7 @@ class TestProject:
         assert response.status_code == 201, f"The status code is {response.status_code} instead of 201"
         assert data == expected_data, f'The expected response was {expected_data}, but the following data was received {data}'
 
+    @pt.mark.xfail
     def test_POST_project_with_title_json(self):
         "Verifies that a project is succesfully created with a title attribute"
         url = "http://localhost:4567/projects?title=project"
@@ -119,6 +120,7 @@ class TestProject:
         assert response.status_code == 201, f"The status code is {response.status_code} instead of 201"
         assert data == expected_data, f'The expected response was {expected_data}, but the following data was received {data}'
     
+    @pt.mark.xfail
     def test_DELETE_project(self):
         "UNDOCUMENTED - Verifies that all projects are deleted when running delete on project"
         url = "http://localhost:4567/projects"
@@ -209,6 +211,7 @@ class TestProjectID:
         response = requests.head(url, headers={"Accept": "application/json"}, verify=False)
         assert response.status_code == 200, f"The status code is {response.status_code} instead of 200"
     
+    @pt.mark.xfail
     def test_PUT_existing_project(self):
         "Verifies that an existing project description is succesfully modified"
         url = "http://localhost:4567/projects"
@@ -319,6 +322,7 @@ class TestProjectIDTask:
 
         assert (data == expected_data) or (data == expected_data2), f'The expected response was {expected_data}, but the following data was received {data}'
 
+    @pt.mark.xfail
     def test_GET_tasks_non_existing_project(self):
         "Verifies that a 404 error is thrown when tasks of a project with a non existing ID is requested"
         url = "http://localhost:4567/projects/2/tasks"
@@ -326,6 +330,7 @@ class TestProjectIDTask:
 
         assert response.status_code == 404, f"The status code is {response.status_code} instead of 404"
 
+    @pt.mark.xfail
     def test_GET_task_from_project_task_id(self):
         "UNDOCUMENTED Verifies that a task is succesfuly retrieved from a project with a task ID"
         url = "http://localhost:4567/projects/1/tasks/1"

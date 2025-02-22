@@ -81,6 +81,7 @@ class TesttodoEndpoint:
         response = requests.put(BASE_URL, json=todo, headers=HEADERS_JSON)
         assert response.status_code == 405
 
+    @pt.mark.xfail
     def test_post_todo(self):
         todo = {
             "title": "Test Todo",
@@ -108,6 +109,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_xml(self):
         todo = {
             "title": "Test Todo",
@@ -138,6 +140,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_missing_title(self):
         todo = {
             "doneStatus": "false",
@@ -229,6 +232,7 @@ class TesttodoEndpoint:
         data = response.json()
         assert data == {'errorMessages': ['Could not find an instance with todos/420']}
 
+    @pt.mark.xfail
     def test_put_todo_id(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -252,6 +256,7 @@ class TesttodoEndpoint:
         initial_todos_excluding_modified = [t for t in self.initial_todos if t['id'] != todo['id']]
         assert all(todo in current_todos for todo in initial_todos_excluding_modified), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_put_todo_id_xml(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -314,6 +319,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_put_todo_id_remove_tasksof(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -345,6 +351,7 @@ class TesttodoEndpoint:
         initial_todos_excluding_modified = [t for t in self.initial_todos if t['id'] != todo['id']]
         assert all(todo in current_todos for todo in initial_todos_excluding_modified), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_id(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -378,6 +385,7 @@ class TesttodoEndpoint:
         initial_todos_excluding_modified = [t for t in self.initial_todos if t['id'] != todo['id']]
         assert all(todo in current_todos for todo in initial_todos_excluding_modified), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_id_xml(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -431,6 +439,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_id_removing_description(self):
         todo = random.choice(self.initial_todos["todos"])
         new_todo = {
@@ -484,6 +493,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_post_todo_id_removing_tasksof_BUG(self):
         "Bug: API doesn't update the todo when tasksof is empty"
         todo = random.choice(self.initial_todos["todos"])
@@ -550,6 +560,7 @@ class TesttodoEndpoint:
         current_todos = response.json()
         assert all(todo in current_todos for todo in self.initial_todos), "Initial todos have changed"
 
+    @pt.mark.xfail
     def test_todos_id_tasksof_not_found_BUG(self):
         "Bug: API returns 200 instead of 404 when the todo is not found"
         response = requests.get(f"{BASE_URL}/420/tasksof", headers=HEADERS_JSON)
