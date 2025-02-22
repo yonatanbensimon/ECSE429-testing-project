@@ -141,7 +141,7 @@ class TesttodoEndpoint:
 
     def test_post_todo_missing_title(self):
         todo = {
-            "doneStatus": False,
+            "doneStatus": "false",
             "description": "This is a test todo",
             "tasksof": [
                 {
@@ -557,3 +557,16 @@ class TesttodoEndpoint:
         assert response.status_code == 404
         data = response.json()
         assert data == {'errorMessages': ['Could not find an instance with todos/420']}
+    
+    def test_todo_malformed_JSON(self):
+        todo = {
+            54: "false",
+            "description": "This is a test todo",
+        }
+        response = requests.post(BASE_URL, json=todo, headers=HEADERS_JSON)
+        assert response.status_code == 400
+    
+    def test_todo_malformed_XML(self):
+        todo = "XMLTEST"
+        response = requests.post(BASE_URL, json=todo, headers=HEADERS_XML)
+        assert response.status_code == 400
