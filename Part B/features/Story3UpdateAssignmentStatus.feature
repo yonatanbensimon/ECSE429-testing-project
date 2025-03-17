@@ -10,13 +10,23 @@ Feature: Update an Assignment task's status
         | A1    | Assignment 1 | false      |
         | A2    | Assignment 2 | true      |
     
-    Scenario: Complete an assignment task (Normal Flow)
-        When a student completes assignment A1
-        Then the assignment task A1 is marked as complete
-    
-    Scenario: Uncomplete an assignment task (Alternate Flow)
-        When a student uncompletes assignment A2
-        Then the assignment task A2 is marked as incomplete   
+    Scenario Outline: Complete an assignment task (Normal Flow)
+        When a student completes assignment <title>
+        Then the assignment task <title> is marked as complete
+        
+        Examples:
+            | title |
+            | A1    |
+            | A2    |
+
+    Scenario Outline: Uncomplete an assignment task (Alternate Flow)
+        When a student uncompletes assignment <title>
+        Then the assignment task <title> is marked as incomplete  
+
+        Examples:
+            | title |
+            | A1    |
+            | A2    |
 
     Scenario Outline: Update an assignment task which doesn't exist (Error Flow)
         Given an assignment task with id <non-existent-id> does not exist 
@@ -26,3 +36,5 @@ Feature: Update an Assignment task's status
         Examples:
             | non-existent-id | doneStatus | message | status_code |
             | 32    | true | Invalid GUID for 32 entity todo | 404 |
+            | 33    | false | Invalid GUID for 33 entity todo | 404 |
+            | 34    | false | Invalid GUID for 34 entity todo | 404 |

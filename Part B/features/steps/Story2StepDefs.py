@@ -35,7 +35,7 @@ def step_then_verify_unfinished_assignments(context):
     assert set(actual_titles) == set(expected_titles), (
         f"Expected unfinished assignments: {expected_titles}, but got {actual_titles}"
     )
-    
+
 @then("no unfinished assignments are displayed")
 def step_then_verify_no_unfinished_assignments(context):
     """Ensure that no unfinished assignments are returned."""
