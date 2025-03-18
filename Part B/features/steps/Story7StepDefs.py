@@ -6,49 +6,55 @@ from runAllTests import BASE_URL, start_system, shutdown_system
 def step_given_task_exists(context, t_id):
     response = requests.get(f"{BASE_URL}/todos/{t_id}")
     if response.status_code != 200:
-
         payload = {
             "title": f"Task {t_id}",
             "doneStatus": False
         }
         create_response = requests.post(f"{BASE_URL}/todos", json=payload)
         assert create_response.status_code == 201, f"Unable to create task with id {t_id}"
-    context.task_id = t_id
+        task = create_response.json()
+        context.task_id = task.get("id")
+    else:
+        task = response.json()
+        context.task_id = task.get("id")
 
 @given('that the task with "{t_id}" is already linked to the project with id "{p_id}"')
 def step_given_task_already_linked(context, t_id, p_id):
-    payload = {"id": t_id}
-    response = requests.post(f"{BASE_URL}/projects/{p_id}/tasks", json=payload)
-
+    payload = {"id": context.task_id}
+    project_id = getattr(context, "project_id", p_id)
+    response = requests.post(f"{BASE_URL}/projects/{project_id}/tasks", json=payload)
     if response.status_code not in (200, 201):
         assert False, f"Error pre-linking task: {response.status_code} - {response.text}"
 
-
 @when('a student adds an assignment task with id {t_id} to a project with id {p_id}')
 def step_when_add_task(context, t_id, p_id):
-    payload = {"id": t_id}
-    context.response = requests.post(f"{BASE_URL}/projects/{p_id}/tasks", json=payload)
+    payload = {"id": context.task_id}
+    project_id = getattr(context, "project_id", p_id)
+    context.response = requests.post(f"{BASE_URL}/projects/{project_id}/tasks", json=payload)
 
 @when('a students adds the assignment task with id {t_id} to the project with id "{p_id}"')
 def step_when_add_task_already_linked(context, t_id, p_id):
-    # This step is identical to the previous "when" – the pre-link given step ensures the task is already linked.
-    payload = {"id": t_id}
-    context.response = requests.post(f"{BASE_URL}/projects/{p_id}/tasks", json=payload)
+    payload = {"id": context.task_id}
+    project_id = getattr(context, "project_id", p_id)
+    context.response = requests.post(f"{BASE_URL}/projects/{project_id}/tasks", json=payload)
 
 @when('a students adds an assignment task with a non existend id "{t_id}" to project with id "{p_id}"')
 def step_when_add_nonexistent_task(context, t_id, p_id):
     payload = {"id": t_id}
-    context.response = requests.post(f"{BASE_URL}/projects/{p_id}/tasks", json=payload)
+    project_id = getattr(context, "project_id", p_id)
+    context.response = requests.post(f"{BASE_URL}/projects/{project_id}/tasks", json=payload)
 
 @then('the task with id {t_id} is added to the project with id {p_id}')
 def step_then_verify_task_linked(context, t_id, p_id):
-    # Retrieve the list of tasks linked to the project.
-    response = requests.get(f"{BASE_URL}/projects/{p_id}/tasks")
-    assert response.status_code == 200, f"Failed to fetch tasks of project {p_id}: {response.status_code}"
-    tasks = response.json().get("tasks", [])
-    # Check if one of the tasks has the expected id.
-    found = any(str(task.get("id")) == str(t_id) for task in tasks)
-    assert found, f"Task with id {t_id} was not found linked to project {p_id}"
+    project_id = getattr(context, "project_id", p_id)
+    response = requests.get(f"{BASE_URL}/projects/{project_id}/tasks")
+    assert response.status_code == 200, f"Failed to fetch tasks of project {project_id}: {response.status_code}"
+    
+    todos = response.json().get("todos")
+    assert todos is not None, "Response JSON does not contain the 'todos' key"
+    
+    found = any(str(todo.get("id")) == str(context.task_id) for todo in todos)
+    assert found, f"Task with id {context.task_id} was not found linked to project {project_id}"
 
 @then('the response status is {expected_status:d}')
 def step_then_response_status(context, expected_status):

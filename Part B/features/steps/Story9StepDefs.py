@@ -16,7 +16,8 @@ def step_given_following_projects_exist(context):
     """
     for row in context.table:
         title = row["p_id"]
-        active = row["active"]
+        active = bool(row["active"].strip())
+        print(active)
         payload = {
             "title": title,
             "description": f"Auto-created project {title} for filtering tests",
@@ -82,12 +83,6 @@ def step_then_response_empty_list(context):
         projects = []
     assert isinstance(projects, list), "Expected projects to be a list"
     assert len(projects) == 0, f"Expected no projects but found {len(projects)}"
-
-@then('"{message}" is returned')
-def step_then_error_message(context, message):
-    error_response = context.response.json()
-    assert "errorMessages" in error_response, f"Expected errorMessages but got: {error_response}"
-    assert message in error_response["errorMessages"], f"Expected error message '{message}', got: {error_response['errorMessages']}"
 
 def before_scenario(context, scenario):
     start_system()

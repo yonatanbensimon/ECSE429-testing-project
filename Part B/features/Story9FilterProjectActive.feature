@@ -14,7 +14,7 @@ Feature: Filter a project by active status
 	
 	Scenario Outline: Get all projects with active status "true" (Normal Flow)
 		When a student gets all project with an active status of "true"
-		Then the response contains all <p_id>s with an active status of true
+		Then the response contains all <p_id> with an active status of true
 		And the response status is 200
 		
 		Examples:

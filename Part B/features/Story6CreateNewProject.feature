@@ -4,7 +4,7 @@ Feature: Create a new project
 	So that I can keep track of my different classes
 	
 	Background: API is running
-		 Given the API server is running
+		 Given the API is running
 
 	Scenario Outline: Create a course project (Normal Flow)
 		When a student creates a course project with title "<title>" and description "<description>"
