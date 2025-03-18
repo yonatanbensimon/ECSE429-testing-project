@@ -5,7 +5,7 @@ Feature: Delete a project
 	
 	Background: API is running
 		Given the API server is running
-		And the following projects exists:
+		And these projects exists:
 		| p_id | title |
 		| 1    | test  |
 		| 2    |       |

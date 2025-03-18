@@ -78,3 +78,18 @@ def step_given_assignment_does_not_exist(context, non_existent_id):
     response = requests.get(f"{BASE_URL}/todos/{non_existent_id}")
     assert response.status_code == 404, f"Assignment {non_existent_id} exists when it shouldn't"
 
+@given('a project with ID "{p_id}" exists')
+def step_given_project_exists(context, p_id):
+
+    response = requests.get(f"{BASE_URL}/projects/{p_id}")
+    if response.status_code != 200:
+        
+        payload = {
+            "title": f"Project {p_id}",
+            "description": "Auto-created project for testing"
+        }
+        create_response = requests.post(f"{BASE_URL}/projects", json=payload)
+        assert create_response.status_code == 201, f"Unable to create project for id {p_id}"
+
+    context.project_id = p_id
+

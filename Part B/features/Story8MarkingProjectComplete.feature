@@ -5,7 +5,7 @@ Feature: Mark Project as completed
 	
 	Background: API is running, project exists
 		Given the API server is running
-		And a class project with id "<p_id>" exists
+		And a project with ID "<p_id>" exists
 	
 	Scenario Outline: Mark a class project as completed (Normal Flow)
 		When a student modifies the completed status of project with id <p_id> with status "true"
